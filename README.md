@@ -1,0 +1,50 @@
+HAECA — Human Aging Endothelial Cell Atlas Analysis Pipelines
+
+This repository contains R scripts and workflows for processing and analyzing Human Aging Endothelial Cell Atlas (HAECA) single-cell RNA-seq data. The pipeline converts tissue-specific endothelial Seurat objects into pseudobulk datasets, performs differential expression analysis, and generates summary plots.
+
+Overview
+
+Step 1 — Create Pseudobulk Datasets Script: create_pseudobulk_haeca.R Input: Endothelial cell–filtered Seurat .RDS objects for each HAECA tissue.
+
+Data source: HAECA endothelial cell datasets (Zenodo: https://zenodo.org/records/16779452 - released upon publication)
+
+What happens:
+
+    Loading of all *_ECs_filtered.RDS files from work_dir.
+    Aggregation of counts into pseudobulk datasets per Donor, Age_bracket, and HAECA_ID (categorized by single-cell and single-nucleus derived samples)
+    Filtering out donor groups with fewer than 10 cells.
+    Saving of pseudobulk .RDS files for downstream DESeq2 analysis.
+
+Output bulk/bulk__age_brackets.rds
+
+Step 2 — Wald Test (Differential Gene Expression Analysis)
+
+Script: wald_dgea_pipeline.R Input: Pseudobulk .RDS files created in Step 1.
+
+What happens:
+
+    Loading of pseudobulk files for all tissues in work_dir.
+    Creation of a DESeq2 dataset for each tissue.
+    Wald tests (comparing aged vs. young), model: ~ Sampling_Study + Age_brackets
+
+Output output/DGEA__wald.csv
+
+Installation Install dependencies:
+
+install.packages(c("Seurat", "dplyr", "ggplot2", "stringr", "tidyr", "data.table", "tidyverse", "cowplot")) BiocManager::install(c("edgeR", "DESeq2", "EnhancedVolcano"))
+
+Usage Summary
+
+    Create Pseudobulk Rscript create_pseudobulk_haeca.R
+
+    Run Wald Test DGEA Rscript wald_dgea_pipeline.R
+
+Repository Structure
+
+/create_pseudobulk_haeca.R # Step 1: Convert Seurat objects to pseudobulk
+
+/wald_dgea_pipeline.R # Step 2: Run DESeq2 Wald test on pseudobulk
+
+/plot_volcano.R # Step 3: Optional volcano plot generation
+
+/fun_dds_from_bulk.R # Helper function for DESeq2 dataset creation
