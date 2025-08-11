@@ -1,0 +1,85 @@
+#Wald test for each tissue and age bracket comparison, volcano plot from results
+
+library(Seurat)
+library(dplyr)
+library(ggplot2)
+library(stringr)
+library(data.table)
+library(tidyverse)
+library(edgeR)
+library(DESeq2)
+library(EnhancedVolcano)
+library(cowplot)
+
+#### Load data and set directories ####
+work_dir <- file.path("/path_to_pseudobulk_.RDS_file/") #e.g.: bulk_adipose_age_brackets.RDS
+setwd(work_dir)
+output_dir <- paste0(work_dir, "output/")
+if(!dir.exists(output_dir)){dir.create(output_dir,recursive = T)}
+plot_dir <- paste0(output_dir, "/plots")
+if(!dir.exists(plot_dir)){dir.create(plot_dir,recursive = T)}
+
+#get function
+script_dir <- file.path("/Path_to_functions")
+source(paste0(script_dir, "/fun_dds_from_bulk.R"))
+
+cols <- c("#266c91","#f0cf16")
+
+# Load data
+files <- list.files(work_dir, pattern = ".rds", full.names = FALSE)
+tissues <- unique(str_extract(files, "(?<=bulk_)[a-zA-Z]+"))
+
+#specify deseq2 test
+deseq_tests <- c('wald')
+
+#testgroup <- c('Age_brackets')
+test <- "wald"
+
+contrast <- c("Age_brackets", "aged", "young")
+
+#make lists for plots and results
+wald_plot_list <- list()
+plotcount_list <- list()
+
+for(tissue in tissues) {
+  
+  if (tissue == "kidney") {
+    design <- as.formula(~ Age_brackets)
+    reduced <- as.formula(~ 1)
+  } else {
+    design <- as.formula(~ Sampling_Study + Age_brackets)
+    reduced <- as.formula(~ Sampling_Study)
+  }
+  
+  dds <- dds_from_bulk(tissue = tissue, design = design)
+  
+  if (is.null(dds)) {
+    message(paste("Skipping", tissue))
+  } else {
+    
+    dds_wald <- DESeq(dds)
+    results <- results(dds_wald, contrast = contrast)
+  }
+  
+  results_tb <- results %>%
+    data.frame() %>%
+    rownames_to_column(var="gene") %>%
+    as_tibble()
+  
+  genes_padj <- results_tb %>%
+    filter(padj < 0.1 & !is.na(padj)) %>%
+    pull(gene)
+  
+  genes_padj_select <- results_tb %>%
+    filter(padj < 0.1 & !is.na(padj)) %>%
+    slice_max(n=10, order_by = log2FoldChange) %>%
+    bind_rows(slice_min(results_tb %>% filter(padj < 0.1 & !is.na(padj)),
+                        n = 10, order_by = log2FoldChange)) %>%
+    pull(gene)
+  
+  #save results
+  write.csv(results_tb, file = paste0(output_dir, "/DGEA_", tissue, "_wald.csv"))
+}
+  
+
+  
