@@ -6,7 +6,7 @@ This repository contains R scripts and workflows for processing and analyzing Hu
 
 **Step 1: Create Pseudobulk Datasets**
 
-Script: create_pseudobulk_haeca.R 
+Script: HAECA_pseudobulk_from_seurat
 
 Input: Endothelial cell–filtered Seurat .RDS objects for each HAECA tissue
 
@@ -24,7 +24,9 @@ Output bulk/bulk__age_brackets.rds
 
 **Step 2: Wald Test (Differential Gene Expression Analysis)****
 
-Script: wald_dgea_pipeline.R Input: Pseudobulk .RDS files created in Step 1.
+Script: HAECA_DGEA_aged_vs_young
+
+Input: Pseudobulk .RDS files created in Step 1.
 
 What happens:
 
