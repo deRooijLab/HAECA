@@ -38,15 +38,3 @@ Output output/DGEA__wald.csv
 
 Install dependencies:
 install.packages(c("Seurat", "dplyr", "ggplot2", "stringr", "tidyr", "data.table", "tidyverse", "cowplot")) BiocManager::install(c("edgeR", "DESeq2", "EnhancedVolcano"))
-
-Usage Summary
-- Create Pseudobulk Rscript create_pseudobulk_haeca.R
-- Run Wald Test DGEA Rscript wald_dgea_pipeline.R
-
-**Repository Structure**
-
-/create_pseudobulk_haeca.R # Step 1: Convert Seurat objects to pseudobulk
-
-/wald_dgea_pipeline.R # Step 2: Run DESeq2 Wald test on pseudobulk
-
-/fun_dds_from_bulk.R # Helper function for DESeq2 dataset creation
