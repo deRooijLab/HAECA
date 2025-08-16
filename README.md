@@ -42,5 +42,5 @@ Install dependencies:
 install.packages(c("Seurat", "dplyr", "ggplot2", "stringr", "tidyr", "data.table", "tidyverse", "cowplot")) BiocManager::install(c("edgeR", "DESeq2", "EnhancedVolcano"))
 
 **Other analyses**
-Script: HAECA_CDKN1A_analysis: to reproduce Figure 4f of the preprint manuscript
+Script: HAECA_CDKN1A_analysis (to reproduce Figure 4f of the preprint manuscript)
 
