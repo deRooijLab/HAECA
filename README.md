@@ -1,6 +1,6 @@
 **HAECA — Human Aging Endothelial Cell Atlas Analysis Pipelines**
 
-This repository contains R scripts and workflows for processing and analyzing Human Aging Endothelial Cell Atlas (HAECA) single-cell RNA-seq data. The pipeline converts tissue-specific endothelial Seurat objects into pseudobulk datasets, performs differential expression analysis, and generates summary plots.
+This repository contains R scripts and workflows for processing and analyzing Human Aging Endothelial Cell Atlas (HAECA) single-cell RNA-seq data. The pipeline converts tissue-specific endothelial Seurat objects into pseudobulk datasets, and performs differential expression analysis. See bottom of this page for analyses on single-cell level (e.g., CDKN1A+ vs. CDKN1A- cells).
 
 **Overview**
 
