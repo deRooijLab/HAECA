@@ -22,7 +22,7 @@ What happens:
 Output bulk/bulk__age_brackets.rds
 
 
-**Step 2: Wald Test (Differential Gene Expression Analysis)****
+**Step 2: Wald Test (Differential Gene Expression Analysis)**
 
 Script: HAECA_DGEA_aged_vs_young
 
