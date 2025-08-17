@@ -1,0 +1,184 @@
+# Senescence Gene Signature Analysis, using SenMayo & CellAge gene sets
+
+# This script scores cells using senescence-related gene signatures (SenMayo, CellAge),
+# identifies markers enriched across tissues and HAECA_ID groups, and generates violin
+# plots for visualization.
+#
+# Requirements:
+#   - Seurat object (HAECA.RDS) with metadata including Tissue,
+#     HAECA_ID, Age_brackets
+#   - Signature gene sets (SenMayo.csv, CellAge_ind.csv)
+#
+
+#to reproduce Figure S6a-d
+
+#### Load required libraries
+library(Seurat)
+library(dplyr)
+library(ggplot2)
+library(patchwork)
+
+#### Set directories
+data_dir <- "path_to_HAECA_global.RDS"
+output_dir <- "path_to_output_directory"
+if (!dir.exists(output_dir)) {
+  dir.create(output_dir, recursive = TRUE)
+}
+setwd(output_dir)
+
+
+# Load input data
+data <- readRDS("HAECA_global.RDS")
+print(data)
+# 21979 features across 375829 samples within 2 assays
+
+# Get tissues
+tissues <- unique(data$Tissue)
+
+#### SenMayo analysis
+SenMayo <- read.csv("SenMayo.csv")
+senescence_genes <- intersect(SenMayo$Gene, rownames(data))
+
+data <- AddModuleScore(
+  object   = data,
+  features = list(senescence_genes),
+  name     = "SenescenceScore"
+)
+
+
+#### Loop through tissues 
+DefaultAssay(data) <- "RNA"
+senescence_metadata_all <- data.frame()
+
+for (tissue in tissues) {
+  cat("Processing tissue:", tissue, "\n")
+  
+  Idents(data) <- "Tissue"
+  tissue_data <- subset(data, idents = tissue)
+  Idents(tissue_data) <- "HAECA_ID"
+  
+  significant_markers_list <- list()
+  tissue_data$senescence_group <- "Middle"
+  
+  for (current_id in unique(tissue_data$HAECA_ID)) {
+    cat("  HAECA_ID:", current_id, "\n")
+    
+    tissue_data_sub <- subset(tissue_data, idents = current_id)
+    scores <- tissue_data_sub$SenescenceScore1
+    quantiles <- quantile(scores, probs = c(0.25, 0.75), na.rm = TRUE)
+    
+    # Label groups
+    tissue_data_sub$senescence_group <- case_when(
+      scores >= quantiles[2] ~ "HighSenescence",
+      scores <= quantiles[1] ~ "LowSenescence",
+      scores > quantiles[1] & scores < quantiles[2] ~ "MiddleSenescence",
+      TRUE ~ NA_character_
+    )
+    
+    Idents(tissue_data_sub) <- "senescence_group"
+    
+    # Marker analysis
+    markers_sen <- FindMarkers(
+      tissue_data_sub,
+      ident.1 = "HighSenescence",
+      ident.2 = "LowSenescence",
+      min.pct = 0.1,
+      only.pos = TRUE
+    )
+    markers_sen$gene <- rownames(markers_sen)
+    significant_markers_list[[current_id]] <- markers_sen
+    
+    senescence_metadata_all <- rbind(
+      senescence_metadata_all, tissue_data_sub@meta.data
+    )
+  }
+  
+  # Combine results
+  combined_markers <- do.call(rbind, significant_markers_list)
+  combined_markers <- combined_markers[combined_markers$p_val < 0.05, ]
+  
+  if (nrow(combined_markers) > 0) {
+    marker_counts <- table(combined_markers$gene)
+    significant_genes <- names(marker_counts[marker_counts >= (0.65 * length(unique(tissue_data$HAECA_ID)))])
+    
+    combined_markers_filtered <- combined_markers[combined_markers$gene %in% significant_genes, ]
+    write.csv(combined_markers_filtered,
+              file = paste0(output_dir, "/", tissue, "_markers_enriched_65percent_HAECA_ID.csv"))
+  } else {
+    cat("  No markers found for", tissue, "\n")
+  }
+}
+
+# Add metadata back
+data <- AddMetaData(data, metadata = senescence_metadata_all["senescence_group"])
+
+#### Identify SenMayo-high associated genes across tissues (SenMayo)
+files <- list.files(pattern = "HAECA_ID.csv$")
+gene_lists <- lapply(files, function(file) {
+  df <- read.csv(file)
+  unique(df$gene)
+})
+
+gene_counts <- table(unlist(gene_lists))
+gene_counts <- data.frame(gene_counts)
+
+# Save results
+write.csv(gene_counts, paste0(output_dir, "/SenMayo_high_associated_genes.csv"))
+
+
+#### Repeat analysis with CellAge signature
+
+output_dir <- "path_to_output_dir_CellAge"
+if (!dir.exists(output_dir)) {
+  dir.create(output_dir, recursive = TRUE)
+}
+setwd(output_dir)
+
+CellAge_ind <- read.csv("CellAge_ind.csv")
+CellAge_ind <- CellAge_ind[!CellAge_ind$Gene %in% "CDKN1A", ] #remove CDKN1A from the list, since we are comparing the CellAge_ind-associated genes with CDKN1A-associated genes
+senescence_genes <- intersect(CellAge_ind$Gene, rownames(data))
+
+data <- AddModuleScore(
+  object   = data,
+  features = list(senescence_genes),
+  name     = "SenescenceScore2"
+)
+
+# Repeat same per-tissue workflow as above...
+
+
+#### Plotting results 
+
+common_genes <- c("CDKN1A", "MAFF", "ADAMTS1", "JUN",
+                  "TNFRSF10D", "UGCG", "ADAMTS4",
+                  "KLF2", "SRGN", "STX12", "TNFRSF10B")  #to reproduce Figure S6a-d; can be adapted to any genes of interest)
+
+#SenMayo
+data$senescence_group <- factor(
+  data$senescence_group,
+  levels = c("LowSenescence", "MiddleSenescence", "HighSenescence")
+)
+
+#CellAge
+data$senescence_group_CellAge <- factor(
+data$senescence_group_CellAge, 
+levels = c("LowSenescence", "MiddleSenescence", "HighSenescence")
+)
+
+#Plot violin (example for SenMayo)
+p <- VlnPlot(
+  object = data,
+  group.by = "Tissue",
+  split.by = "senescence_group",
+  features = common_genes,
+  combine  = TRUE,
+  stack    = TRUE,
+  flip     = TRUE,
+  pt.size  = 0,
+  cols     = c("#bdbbbc", "#6A94FF", "#2E3192")
+)
+
+pdf("violins_SenMayo.pdf", width = 12, height = 8)
+plot(p)
+dev.off()
+
