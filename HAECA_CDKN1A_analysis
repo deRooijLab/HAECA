@@ -11,7 +11,7 @@ library(ggplot2)
 # Set directories
 data_dir <- "path_to_HAECA_global.RDS"
 setwd(data_dir)
-output_dir <- "path_to_output_directory""
+output_dir <- "path_to_output_directory"
 if(!dir.exists(output_dir)){dir.create(output_dir, recursive = T)}
 
 #loaded global HAECA (to be released from https://zenodo.org/records/16779452 upon publication)
