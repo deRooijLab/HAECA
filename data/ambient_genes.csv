@@ -1,0 +1,117 @@
+Gene,
+ALB,
+APOA1,
+APOA2,
+APOC1,
+APOC3,
+DOCK4,
+EEF1A1,
+FGA,
+FGB,
+FTH1,
+FTL,
+HBB,
+HP,
+KRT14,
+LINC01681,
+MALAT1,
+MT-ATP6,
+MT-ATP8,
+MT-CO1,
+MT-CO2,
+MT-CO3,
+MT-CYB,
+MT-ND1,
+MT-ND2,
+MT-ND3,
+MT-ND4,
+MT-ND4L,
+MT-ND5,
+MT-ND6,
+MT2A,
+MTRNR2L12,
+MTRNR2L8,
+ORM1,
+PTPRT,
+RPL13A,
+RPL15,
+RPL18A,
+RPL21,
+RPL3,
+RPL41,
+RPL7,
+RPLP1,
+RPS12,
+RPS15,
+RPS18,
+RPS19,
+RPS27,
+SAA1,
+SAA2,
+SCGB3A1,"secretoglobulins, https://bmcgenomics.biomedcentral.com/articles/10.1186/s12864-023-09822-3"
+SERPINA1,
+SFTPC,
+SMCR8,
+SPATA22,
+TMSB4X,
+TPT1,
+TTR,
+TNNT2,https://academic.oup.com/eurheartj/article/43/43/4536/6546012
+NRGN,https://pmc.ncbi.nlm.nih.gov/articles/PMC9789184/
+CHN1,https://pmc.ncbi.nlm.nih.gov/articles/PMC9789184/
+SFTPA,https://pmc.ncbi.nlm.nih.gov/articles/PMC6580683/#sec18
+SFTPB,https://pmc.ncbi.nlm.nih.gov/articles/PMC6580683/#sec18
+SFTPD,https://pmc.ncbi.nlm.nih.gov/articles/PMC6580683/#sec18
+CYP2E1,https://www.nature.com/articles/s41467-024-55325-4
+ASGR1,https://www.nature.com/articles/s41467-024-55325-4
+CYP3A4,https://www.nature.com/articles/s41467-024-55325-4
+SCD,https://www.nature.com/articles/s41467-024-55325-4
+SLP1,https://www.nature.com/articles/s41467-024-55325-4
+CYP2B6,https://www.nature.com/articles/s41467-024-55325-4
+CPS1,https://www.nature.com/articles/s41467-024-55325-4
+CRP,https://www.nature.com/articles/s41467-024-55325-4
+A2M,https://www.nature.com/articles/s41467-024-55325-4
+CYP27A1,https://www.nature.com/articles/s41467-024-55325-4
+CYP4A11,https://www.nature.com/articles/s41467-024-55325-4
+CYP4V2,https://www.nature.com/articles/s41467-024-55325-4
+CYP2B7P,https://www.nature.com/articles/s41467-024-55325-4
+CYP2A6,https://www.nature.com/articles/s41467-024-55325-4
+CYP2A7,https://www.nature.com/articles/s41467-024-55325-4
+CYP3A5,https://www.nature.com/articles/s41467-024-55325-4
+CYP2C9,https://www.nature.com/articles/s41467-024-55325-4
+CYP2C8,https://www.nature.com/articles/s41467-024-55325-4
+CYP4F3,https://www.nature.com/articles/s41467-024-55325-4
+CYP3A43,https://www.nature.com/articles/s41467-024-55325-4
+FGG,
+HBA1,hemoglobins
+HBA2,hemoglobins
+HBB,hemoglobins
+HBD,hemoglobins
+HBG1,hemoglobins
+HBG2,hemoglobins
+HBE1,hemoglobins
+HBZ,hemoglobins
+HBD,hemoglobins
+HBE1,hemoglobins
+RYR2,"cardiomycyte genes, https://www.nature.com/articles/s41586-020-2797-4#Sec3"
+TTN,"cardiomycyte genes, https://www.nature.com/articles/s41586-020-2797-4#Sec3"
+SLC8A1,"cardiomycyte genes, https://www.nature.com/articles/s41586-020-2797-4#Sec3"
+MYBPC3,"cardiomycyte genes, https://www.nature.com/articles/s41586-020-2797-4#Sec3"
+MYH7,"cardiomycyte genes, https://www.nature.com/articles/s41586-020-2797-4#Sec3"
+MYL2,"cardiomycyte genes, https://www.nature.com/articles/s41586-020-2797-4#Sec3"
+TNNT3,"cardiomycyte genes, https://www.nature.com/articles/s41586-020-2797-4#Sec3"
+TNNI3,"cardiomycyte genes, https://www.nature.com/articles/s41586-020-2797-4#Sec3"
+TNNC1,"cardiomycyte genes, https://www.nature.com/articles/s41586-020-2797-4#Sec3"
+TNNI3K,"cardiomycyte genes, https://www.nature.com/articles/s41586-020-2797-4#Sec3"
+TNNI1,"cardiomycyte genes, https://www.nature.com/articles/s41586-020-2797-4#Sec3"
+APOH,hepatocytes
+SCGB1A1,secretoglobulins
+SCGB1B3,secretoglobulins
+SCGB1C1,secretoglobulins
+SCGB1D1,secretoglobulins
+SCGB1D2,secretoglobulins
+SCGB1D4,secretoglobulins
+SCGB2A1,secretoglobulins
+SCGB2A2,secretoglobulins
+SCGB2B2,secretoglobulins
+SCGB3A2,secretoglobulins
